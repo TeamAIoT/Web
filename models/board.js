@@ -8,12 +8,17 @@ const CommentSchema=new Schema({
     createdAt: {type:Date},
 });
 
+const FileSchema=new Schema({
+    fileName: {type:String},
+});
+
+
 const PostSchema=new Schema({
     author: {type:Schema.Types.ObjectId, ref: "User"},
     title: {type:String},
     content: {type:String},
     createdAt: {type:Date},
-    files:[{type: String}],
+    files: {type:FileSchema},
     comments: [CommentSchema],
 });
 

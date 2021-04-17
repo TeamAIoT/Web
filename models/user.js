@@ -18,6 +18,7 @@ UserSchema.methods.generateToken=()=>{
     const token=jwt.sign({
         _id: this.id,
         userId: this.userId,
+        admin:this.admin,
     },
     process.env.JWT_SECRET,
     {

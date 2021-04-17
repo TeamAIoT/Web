@@ -19,12 +19,12 @@ const Login=(req,res)=>{
     const GetUserInfo=()=>{
         return new Promise(async (resolve,reject)=>{
             try{
-                const user=await User.findOne({userId:userId});
-                if(!user){
+                const users=await User.find({userId:userId});
+                if(user.length===0){
                     reject();
                 }
                 else{
-                    resolve(user);
+                    resolve(user[0]);
                 }
             }
             catch(e){
@@ -59,10 +59,11 @@ const Login=(req,res)=>{
     .then(JWTUpdate)
     .then(()=>{
         res.status(200);
+        res.redirect("/main");
     })
     .catch((e)=>{
         console.error(e);
-        res.status(500);
+        res.status(500).json({message:e});
     });
 }
 

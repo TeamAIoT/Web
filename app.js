@@ -1,5 +1,6 @@
 const express=require('express');
 const mongoose=require('mongoose');
+const cookieParser=require('cookie-parser');
 const app=express();
 require('dotenv').config();
 
@@ -18,8 +19,9 @@ mongoose
         console.error(e);
     });
 
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:false}));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api',require('./api'));
 
