@@ -19,10 +19,13 @@ mongoose
         console.error(e);
     });
 
+
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use('/js',express.static('./static/js'));
+app.use('/css',express.static('./static/css'));
 app.use('/api',require('./api'));
 
 app.listen(process.env.SERVER_PORT,()=>{
