@@ -20,6 +20,8 @@ const PostSchema=new Schema({
 const BoardSchema=new Schema({
     boardName: {type:String},
     posts:[PostSchema],
+},{
+    collection:'Board'
 });
 
 const Board=mongoose.model("Board",BoardSchema);

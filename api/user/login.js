@@ -20,11 +20,11 @@ const Login=(req,res)=>{
         return new Promise(async (resolve,reject)=>{
             try{
                 const users=await User.find({userId:userId});
-                if(user.length===0){
+                if(users.length===0){
                     reject();
                 }
                 else{
-                    resolve(user[0]);
+                    resolve(users[0]);
                 }
             }
             catch(e){
@@ -35,19 +35,25 @@ const Login=(req,res)=>{
 
     const CheckPassword=(user)=>{
         return new Promise((resolve,reject)=>{
-            const key=crypto.pbkdf2Sync(password,user.salt,process.env.REPEAT_NUM,64,'sha512');
-            if(key.toString('base64')===user.hashedPassword){
-                resolve(user);
+            try{
+                const key=crypto.pbkdf2Sync(password,user.salt,Number(process.env.REPEAT_NUM),64,'sha512');
+                if(key.toString('base64')===user.hashedPassword){
+                    resolve(user);
+                }
+                else{
+                    reject('비밀번호 오류!');
+                }
             }
-            else{
-                reject();
+            catch(e){
+                reject(e);
             }
         });
     }
 
     const JWTUpdate=(user)=>{
-        return new Promise((resolve,reject)=>{
-            const token=user.generateToken();
+        return new Promise(async (resolve,reject)=>{
+            console.log(user);
+            const token=await user.generateToken();
             res.cookie("token",token);
             resolve();
         });

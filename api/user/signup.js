@@ -24,7 +24,7 @@ const SignUp=(req,res)=>{
             try{
                 const users=await User.find({userId:userId});
                 if(users.length!==0){
-                    reject();
+                    reject('아이디 중복');
                 }
                 else{
                     resolve();
@@ -43,15 +43,20 @@ const SignUp=(req,res)=>{
                     throw err;
                 }
                 else{
-                    const key=crypto.pbkdf2Sync(password,buf.toString("base64"),process.env.REPEAT_NUM,64);
-                    resolve(buf.toString("base64"),key.toString("base64"));
+                    try{
+                        const key=crypto.pbkdf2Sync(password,buf.toString("base64"),Number(process.env.REPEAT_NUM),64,'sha512');
+                        resolve([buf.toString("base64"),key.toString("base64")]);
+                    }
+                    catch(e){
+                        reject(e);
+                    }
                 }
             });
         });
     }
 
-    const CreateUser=(salt,hashedPassword)=>{
-        return new Promise(async (reslove,reject)=>{
+    const CreateUser=([salt,hashedPassword])=>{
+        return new Promise(async (resolve,reject)=>{
             try{
                 const user=new User({
                     userId:userId,

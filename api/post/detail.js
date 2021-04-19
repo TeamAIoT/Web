@@ -1,8 +1,8 @@
 const Board=require('../../models/board');
 
 const Detail=(req,res)=>{
-    const board_id=req.body.board_id;
-    const post_id=req.body.post_id;
+    const board_id=req.query.board_id;
+    const post_id=req.query.post_id;
     
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{

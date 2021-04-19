@@ -10,13 +10,15 @@ const UserSchema=new Schema({
     email: {type: String},
     hashedPassword: {type: String},
     salt: {type: String},
-    admin: {type: Boolean},
+    admin: {type: Boolean, default: false},
     accessToBoard: [{type:Schema.Types.ObjectId, ref: "Board"}]
+},{
+    collection:"User"
 });
 
-UserSchema.methods.generateToken=()=>{
+UserSchema.methods.generateToken=function(){
     const token=jwt.sign({
-        _id: this.id,
+        _id: this._id,
         userId: this.userId,
         admin:this.admin,
     },
