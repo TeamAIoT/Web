@@ -1,6 +1,6 @@
 const Board=require("../../models/board");
 const User=require('../../models/user');
-const multer=require("multer");
+const File=require('../../models/file');
 const verifyJWT=require('../../utils/verifyJWT');
 
 const Create=(req,res)=>{
@@ -8,6 +8,7 @@ const Create=(req,res)=>{
     const content=req.body.content;
     const file=req.file;
     const board_id=req.body.board_id;
+    
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
             if(!title || !content || !board_id){
@@ -50,24 +51,37 @@ const Create=(req,res)=>{
 
     const CreatePost=(decoded,board)=>{
         return new Promise(async (resolve,reject)=>{
-            if(!file){
-                board.posts.push({
-                    author:decoded._id,
-                    title:title,
-                    content:content,
-                    createdAt:new Date().getTime(),
-                    comments:[],
-                });
+            try{
+                if(!file){
+                    board.posts.push({
+                        author:decoded._id,
+                        title:title,
+                        content:content,
+                        createdAt:new Date().getTime(),
+                        comments:[],
+                    });
+                }
+                else{
+                    const newFile=new File({
+                        fileName:file.filename,
+                        owner:decoded._id,
+                        path:file.path,
+                    });
+                    await newFile.save();
+                    board.posts.push({
+                        author:decoded._id,
+                        title:title,
+                        content:content,
+                        createdAt:new Date().getTime(),
+                        files:newFile._id,
+                        comments:[],
+                    });
+                }
+                await board.save();
+                resolve();
             }
-            else{
-                board.posts.push({
-                    author:decoded._id,
-                    title:title,
-                    content:content,
-                    createdAt:new Date().getTime(),
-                    files:{fileName:file.filename},
-                    comments:[],
-                });
+            catch(e){
+                reject(e);
             }
         });
     }

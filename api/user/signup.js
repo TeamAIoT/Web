@@ -1,4 +1,5 @@
 const crypto=require('crypto');
+const { resolve } = require('path');
 const User=require('../../models/user');
 
 const SignUp=(req,res)=>{
@@ -51,14 +52,20 @@ const SignUp=(req,res)=>{
 
     const CreateUser=(salt,hashedPassword)=>{
         return new Promise(async (reslove,reject)=>{
-            const user=new User({
-                userId:userId,
-                hashedPassword:hashedPassword,
-                salt:salt,
-                email:email,
-                name:name
-            });
-            await user.save();
+            try{
+                const user=new User({
+                    userId:userId,
+                    hashedPassword:hashedPassword,
+                    salt:salt,
+                    email:email,
+                    name:name
+                });
+                await user.save();
+                resolve();
+            }
+            catch(e){
+                reject(e);
+            }
         });
     }
 
@@ -67,7 +74,7 @@ const SignUp=(req,res)=>{
     .then(GetSalt)
     .then(CreateUser)
     .then(()=>{
-        res.status(200).json({message:"Complete Sign Up"});
+        res.status(200).json({message:"success"});
     })
     .catch((e)=>{
         console.error(e);

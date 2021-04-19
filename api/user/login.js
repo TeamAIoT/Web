@@ -58,8 +58,7 @@ const Login=(req,res)=>{
     .then(CheckPassword)
     .then(JWTUpdate)
     .then(()=>{
-        res.status(200);
-        res.redirect("/main");
+        res.status(200).json({message:'success'});
     })
     .catch((e)=>{
         console.error(e);

@@ -15,5 +15,6 @@ router.get('/list',require('./list'));
 router.post('/create',upload.single('file'),require('./create'));
 router.post('/comment',require('./comment'));
 router.post('/edit',require('./edit'));
+router.get('/detail',require('./detail'));
 
 module.exports=router;
