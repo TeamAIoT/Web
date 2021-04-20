@@ -1,12 +1,12 @@
 const Board=require("../../models/board");
 
 const List=(req,res)=>{
-    const board_id=req.body.board_id;
+    const board_id=req.query.board_id;
 
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
             if(!board_id){
-                reject();
+                reject('no board_id');
             }
             else{
                 resolve();
@@ -17,8 +17,13 @@ const List=(req,res)=>{
     const GetPosts=()=>{
         return new Promise(async (resolve,reject)=>{
             try{
-                const posts=await Board.findById(board_id).posts;
-                resolve(posts.sort({createdAt:-1}));
+                Board.findById(board_id).populate('posts.author').exec((err,data)=>{
+                    if(err){
+                        reject(err);
+                    }
+                    const posts=data.posts;
+                    resolve(posts.sort((a,b)=>b.createdAt-a.createdAt));
+                });
             }
             catch(e){
                 reject(e);
@@ -30,9 +35,11 @@ const List=(req,res)=>{
     DataCheck()
     .then(GetPosts)
     .then((posts)=>{
+        console.log(posts);
         res.status(200).json({'message':'success','data':posts});
     })
     .catch((e)=>{
+        console.error(e);
         res.status(500).json(e);
     });
 }

@@ -7,8 +7,8 @@
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <div id="nav"></div>
@@ -22,7 +22,7 @@
             <input name='password' type='password' placeholder="비밀번호" required>
             <input name='password2' type='password' placeholder="비밀번호 확인" required>
             <input name='name' type='text' placeholder="이름" required>
-            <input name='email' type='email' placeholder="이메일" required>
+            <input name='email' type='email' placeholder="이메일" onkeyup="javascript:enterKey();" required>
             <input type='button' value='회원가입' onclick="javascript:signup();">
         </form>
       </div>
@@ -34,8 +34,15 @@
   
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-  <script src="js/ajax.js"></script>
+  <script src="/js/materialize.js"></script>
+  <script src="/js/init.js"></script>
+  <script src="/js/ajax.js"></script>
+  <script>
+    function enterKey(){
+      if(window.event.keyCode===13){
+        $("input[value='회원가입']").click();
+      }
+    }
+  </script>
   </body>
 </html>

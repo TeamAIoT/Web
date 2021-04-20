@@ -7,8 +7,8 @@
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <div id="nav"></div>
@@ -19,7 +19,7 @@
       <div class="row">
         <form action='/api/login' method='POST'>
             <input name='userId' type='text' placeholder="아이디" required>
-            <input name='password' type='password' placeholder="비밀번호" required>
+            <input name='password' type='password' placeholder="비밀번호" onkeyup="javascript:enterKey();" required>
             <input type='button' value='로그인' onclick="javascript:login();">
             <input type='button' value='회원가입' onclick="javascript:location.href='/signup';">
         </form>
@@ -32,8 +32,15 @@
   
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-  <script src="js/ajax.js"></script>
+  <script src="/js/materialize.js"></script>
+  <script src="/js/init.js"></script>
+  <script src="/js/ajax.js"></script>
+  <script>
+    function enterKey(){
+      if(window.event.keyCode===13){
+        $("input[value='로그인']").click();
+      }
+    }
+  </script>
   </body>
 </html>
