@@ -9,7 +9,7 @@ const Comment=(req,res)=>{
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
             if(!board_id || !post_id || !content){
-                reject();
+                reject('request body error');
             }
             else{
                 resolve();
@@ -35,10 +35,10 @@ const Comment=(req,res)=>{
             try{
                 const board=await Board.findById(board_id);
                 const post=board.posts.id(post_id);
-                post.comment.push({
+                post.comments.push({
                     author:decoded._id,
                     content:content,
-                    createdAt:new Date().getTime(),
+                    createdAt:new Date(),
                 });
                 await board.save();
                 resolve();
@@ -56,6 +56,7 @@ const Comment=(req,res)=>{
         res.status(200).json({'message':'success'});
     })
     .catch((e)=>{
+        console.error(e);
         res.status(500).json(e);
     });
 }

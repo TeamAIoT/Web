@@ -89,13 +89,13 @@ window.onload=function(){
                     $("#file").attr("href",`/api/file/download/${data.file._id}`);
                 }
                 if(data.hasOwnProperty('comments')){
-                    for(let i=0;i<data.posts.comments.length;i++){
-                        if(!data.posts.comments[i].author){
-                            data.posts.comments[i].author={name:"알수없음"};
+                    for(let i=0;i<data.comments.length;i++){
+                        if(!data.comments[i].author){
+                            data.comments[i].author={name:"알수없음"};
                         }
-                        $("#comments").append(`<p>${data.posts.comments[i].author.name}</p>`);
-                        $("#comments").append(`<p class="right">${data.posts.comments[i].createdAt.toString().split('T')[0]}</p>`);
-                        $("#comments").append(`<span>${data.posts.comments[i].content}</span>`);
+                        $("#comments").append(`<p>${data.comments[i].author.name}</p>`);
+                        $("#comments").append(`<p class="right">${data.comments[i].createdAt.toString().split('T')[0]}</p>`);
+                        $("#comments").append(`<span>${data.comments[i].content}</span>`);
                     }
                 }
             })

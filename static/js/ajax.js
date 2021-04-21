@@ -76,11 +76,33 @@ const createPost=function(){
         processData:false,
     })
     .done(function(result){
-        alert('저장 완료!');
+        alert('저장 완료');
         history.back();
     })
     .fail(function(result){
         alert('저장 실패');
+        return false;
+    });
+}
+
+const submitComment=function(){
+    const content=$("textarea[name=content]").val();
+    const board_id=location.pathname.split('/')[2];
+    const post_id=location.pathname.split('/')[4];
+    $.ajax({
+        url:'/api/post/comment',
+        type:'POST',
+        data:{
+            content:content,
+            board_id:board_id,
+            post_id:post_id,
+        }
+    })
+    .done(function(result){
+        location.reload();
+    })
+    .fail(function(result){
+        alert('댓글을 저장하는 데 실패했습니다.');
         return false;
     });
 }
