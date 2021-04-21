@@ -6,7 +6,7 @@ const storage=multer.diskStorage({
         callback(null,'files');
     },
     filename: function(req,file,callback){
-        callback(null,(new Date().getTime()))
+        callback(null,`${new Date().getTime().toString()}_${file.originalname}`);
     }
 });
 const upload=multer({storage:storage});

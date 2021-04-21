@@ -42,7 +42,27 @@ router.get('/signup',(req,res)=>{
     }
 });
 
-router.get('/board/:board_id/post/:post_id',async (req,res)=>{
+router.get('/board/:board_id/create',(req,res)=>{
+    try{
+        const data=fs.readFileSync('./views/create.html');
+        res.end(data);
+    }
+    catch(e){
+        res.status(500).end(e);
+    }
+});
+
+router.get('/board/:board_id/post/:post_id',(req,res)=>{
+    try{
+        const data=fs.readFileSync('./views/post.html');
+        res.end(data);
+    }
+    catch(e){
+        res.status(500).end(e);
+    }
+});
+
+router.get('/board/:board_id/edit/:post_id',(req,res)=>{
     try{
         const data=fs.readFileSync('./views/post.html');
         res.end(data);
@@ -61,6 +81,7 @@ router.get('/board/:board_id',(req,res)=>{
         res.status(500).end(e);
     }
 });
+
 
 
 module.exports=router;

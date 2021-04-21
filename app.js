@@ -1,6 +1,7 @@
 const express=require('express');
 const mongoose=require('mongoose');
 const cookieParser=require('cookie-parser');
+const morgan=require('morgan');
 const app=express();
 require('dotenv').config();
 
@@ -24,6 +25,7 @@ app.set('view engine','ejs');
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan('combined'));
 
 app.use('/js',express.static('./static/js'));
 app.use('/css',express.static('./static/css'));

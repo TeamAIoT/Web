@@ -52,7 +52,6 @@ const Login=(req,res)=>{
 
     const JWTUpdate=(user)=>{
         return new Promise(async (resolve,reject)=>{
-            console.log(user);
             const token=await user.generateToken();
             res.cookie("token",token);
             resolve();

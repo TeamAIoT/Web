@@ -12,7 +12,7 @@ const Create=(req,res)=>{
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
             if(!title || !content || !board_id){
-                reject();
+                reject('request body error');
             }
             else{
                 resolve(req.cookies['token']);
@@ -24,8 +24,8 @@ const Create=(req,res)=>{
         return new Promise(async (resolve,reject)=>{
             try{
                 const user=await User.findById(decoded._id);
-                if(!board_id in user.accessToBoard){
-                    reject();
+                if(!board_id in user.accessToBoard && !user.admin){
+                    reject('권한이 없습니다.');
                 }
                 else{
                     resolve(decoded);
@@ -41,7 +41,7 @@ const Create=(req,res)=>{
         return new Promise(async(resolve, reject)=>{
             try{
                 const board=await Board.findById(board_id);
-                resolve(decoded,board);
+                resolve([decoded,board]);
             }
             catch(e){
                 reject(e);
@@ -49,7 +49,7 @@ const Create=(req,res)=>{
         });
     }
 
-    const CreatePost=(decoded,board)=>{
+    const CreatePost=([decoded,board])=>{
         return new Promise(async (resolve,reject)=>{
             try{
                 if(!file){
@@ -73,7 +73,7 @@ const Create=(req,res)=>{
                         title:title,
                         content:content,
                         createdAt:new Date().getTime(),
-                        files:newFile._id,
+                        file:newFile._id,
                         comments:[],
                     });
                 }
@@ -95,6 +95,7 @@ const Create=(req,res)=>{
         res.status(200).json({'message':'success'});
     })
     .catch((e)=>{
+        console.error(e);
         res.status(500).json(e);
     });
 

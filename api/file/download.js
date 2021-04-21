@@ -3,15 +3,15 @@ const fs=require('fs');
 const verifyJWT=require('../../utils/verifyJWT');
 
 const Download=(req,res)=>{
-    const file_id=req.body.file_id;
+    const file_id=req.params.file_id;
     
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
-            if(!board_id || !post_id || !file_id){
-                reject();
+            if(!file_id){
+                reject('request body error');
             }
             else{
-                resolve(res.cookies['token']);
+                resolve(req.cookies['token']);
             }
         });
     }
@@ -21,11 +21,11 @@ const Download=(req,res)=>{
             try{
                 const file=await File.findById(file_id);
                 if(file.owner !== decoded._id && decoded.admin === false){
-                    reject();
+                    reject('권한이 없습니다.');
                 }
                 else{
                     const rs=fs.createReadStream(file.path);
-                    rs.pipe(res);
+                    res.download(file.path,file.fileName.substring(14,file.fileName.length));
                 }
             }
             catch(e){
@@ -37,6 +37,7 @@ const Download=(req,res)=>{
     .then(verifyJWT)
     .then(MakeStream)
     .catch((e)=>{
+        console.error(e);
         res.status(500).json(e);
     });
 }

@@ -7,7 +7,7 @@ const Detail=(req,res)=>{
     const DataCheck=()=>{
         return new Promise((resolve,reject)=>{
             if(!board_id || !post_id){
-                reject();
+                reject('request body error');
             }
             else{
                 resolve();
@@ -16,17 +16,18 @@ const Detail=(req,res)=>{
     }
 
     const GetDetail=()=>{
-        return new Promise(async(resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
             try{
-                const board=Board.findById(board_id);
-                const post=board.posts.id(post_id);
-                const data=await post.populate('file');
-                resolve(data);
+                Board.findById(board_id).populate('posts.file').populate('posts.author').populate('posts.comments.author').exec(async(err,data)=>{
+                    if(err){
+                        throw err;
+                    }
+                    resolve(await data.posts.id(post_id));
+                });
             }
             catch(e){
                 reject(e);
             }
-            
         });
     }
 
@@ -36,6 +37,7 @@ const Detail=(req,res)=>{
         res.status(200).json({'message':'success','data':data});
     })
     .catch((e)=>{
+        console.error(e);
         res.status(500).json(e);
     });
 }

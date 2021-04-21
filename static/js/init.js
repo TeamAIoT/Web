@@ -35,7 +35,7 @@ window.onload=function(){
                 return false;
             });
         }
-        if(location.pathname.includes('/board') && !location.pathname.includes('/post')){
+        if(location.pathname.includes('/board') && !location.pathname.includes('/post') && !location.pathname.includes('/create') && !location.pathname.includes('/edit')){
             let query={};
             location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { query[key] = value; });
             const postPerPage=10;
@@ -46,11 +46,13 @@ window.onload=function(){
                 url:`/api/post/list?board_id=${board_id}`,
             })
             .done(function(result){
-                const data=result.data;
+                let data=result.data;
                 for(let i=(page-1)*postPerPage;i<page*postPerPage;i++){
-                    console.log(data[i].createdAt);
                     if(i>=data.length){
                         break;
+                    }
+                    if(!data[i].author){
+                        data[i].author={name:"알수없음"};
                     }
                     $('tbody').prepend(`<tr><td>${i+1}</td><td><a href="/board/${board_id}/post/${data[i]._id}">${data[i].title}</a></td><td>${data[i].author.name}</td><td>${data[i].createdAt.toString().split('T')[0]}</td></tr>`);
                 }
@@ -59,6 +61,41 @@ window.onload=function(){
                 alert('게시물 리스트를 불러오는 데 실패했습니다.');
                 return false;
             })
+        }
+        if(location.pathname.includes('/board') && location.pathname.includes('/post')){
+            const board_id=location.pathname.split('/')[2];
+            const post_id=location.pathname.split('/')[4];
+            $.ajax({
+                url:`/api/post/detail?board_id=${board_id}&post_id=${post_id}`,
+                type:'GET',
+            })
+            .done(function(result){
+                let data=result.data;
+                if(!data.author){
+                    data.author={name:"알수없음"};
+                }
+                $("#title").text(data.title);
+                $("#author").text(data.author.name);
+                $("#content").text(data.content);
+                if(data.hasOwnProperty('file') && data.file){
+                    $("#file").text(data.file.fileName.substring(14,data.file.fileName.length));
+                    $("#file").attr("href",`/api/file/download/${data.file._id}`);
+                }
+                if(data.hasOwnProperty('comments')){
+                    for(let i=0;i<data.posts.comments.length;i++){
+                        if(!data.posts.comments[i].author){
+                            data.posts.comments[i].author={name:"알수없음"};
+                        }
+                        $("#comments").append(`<p>${data.posts.comments[i].author.name}</p>`);
+                        $("#comments").append(`<p class="right">${data.posts.comments[i].createdAt.toString().split('T')[0]}</p>`);
+                        $("#comments").append(`<span>${data.posts.comments[i].content}</span>`);
+                    }
+                }
+            })
+            .fail(function(result){
+                alert('게시물을 불러오는 데 실패했습니다.');
+                history.back();
+            });
         }
     });
 }

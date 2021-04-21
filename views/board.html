@@ -26,10 +26,10 @@
                       <td>작성일</td>
                   </tr>
               </thead>
-              <tbody>
-
+              <tbody></tbody>
               </tbody>
           </table>
+          <input class="right" type="button" value="글쓰기" onclick="javascript:move();">
       </div>
 
     </div>
@@ -42,5 +42,10 @@
   <script src="/js/materialize.js"></script>
   <script src="/js/init.js"></script>
   <script src="/js/ajax.js"></script>
+  <script>
+    function move(){
+      location.href=`${location.pathname}/create`;
+    }
+  </script>
   </body>
 </html>

@@ -22,7 +22,7 @@ const List=(req,res)=>{
                         reject(err);
                     }
                     const posts=data.posts;
-                    resolve(posts.sort((a,b)=>b.createdAt-a.createdAt));
+                    resolve(posts.sort((a,b)=>a.createdAt-b.createdAt));
                 });
             }
             catch(e){
@@ -35,7 +35,6 @@ const List=(req,res)=>{
     DataCheck()
     .then(GetPosts)
     .then((posts)=>{
-        console.log(posts);
         res.status(200).json({'message':'success','data':posts});
     })
     .catch((e)=>{

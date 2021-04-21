@@ -64,3 +64,23 @@ const logout=function(){
         return false;
     });
 }
+
+const createPost=function(){
+    const formData=new FormData(document.getElementById("createForm"));
+    $.ajax({
+        type:'POST',
+        url:'/api/post/create',
+        data:formData,
+        enctype:'multipart/form-data',
+        contentType:false,
+        processData:false,
+    })
+    .done(function(result){
+        alert('저장 완료!');
+        history.back();
+    })
+    .fail(function(result){
+        alert('저장 실패');
+        return false;
+    });
+}
