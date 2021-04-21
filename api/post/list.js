@@ -22,7 +22,7 @@ const List=(req,res)=>{
                         reject(err);
                     }
                     const posts=data.posts;
-                    resolve(posts.sort((a,b)=>a.createdAt-b.createdAt));
+                    resolve(posts.sort((a,b)=>b.createdAt-a.createdAt));
                 });
             }
             catch(e){
